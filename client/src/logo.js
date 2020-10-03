@@ -1,0 +1,1 @@
+export const INSTA_LOGO = "https://www.signatureimprints.net/wp-content/uploads/2017/02/instagram-logo-gray.jpg";

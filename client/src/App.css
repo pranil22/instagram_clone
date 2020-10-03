@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap');
+
+a {
+  color: black !important;
+}
+
+.mycard {
+  margin-top: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+.avatar1 {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+
+.instagram {
+  font-family: 'Grand Hotel', cursive;
+}
+
+.auth-card {
+  padding: 20px;
+  max-width: 400px;
+  text-align: center;
+  margin: 10px auto;
+}
+
+.input-field input[type=text]:focus {
+  border-bottom: 1px rgb(35, 155, 192) !important;
+  box-shadow: 0 1px 0 0 rgb(35, 155, 192) !important;
+}
+
+
+.input-field input[type=password]:focus {
+  border-bottom: 1px rgb(35, 155, 192) !important;
+  box-shadow: 0 1px 0 0 rgb(35, 155, 192) !important;
+}
+
+.links {
+  margin-top: 10px;
+  color: rgb(21, 128, 190) !important;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+}
+
+.gallery img {
+  width: 30%;
+  margin-top:10px
+}
+
+.home-card {
+  max-width: 500px;
+  margin: 10px auto;
+  padding: 5px;
+}
+
+#toast-container {
+  top: 30px !important;
+  right: 20px !important;
+  left: auto !important;
+}
+
+.file-path-wrapper input[type=text]:focus{
+  border-bottom:  1px solid black !important;
+}
+
+.lds-heart {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  transform: rotate(45deg);
+  transform-origin: 40px 40px;
+}
+.lds-heart div {
+  top: 32px;
+  left: 32px;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: #000;
+  animation: lds-heart 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.lds-heart div:after,
+.lds-heart div:before {
+  content: " ";
+  position: absolute;
+  display: block;
+  width: 32px;
+  height: 32px;
+  background: #000;
+}
+.lds-heart div:before {
+  left: -24px;
+  border-radius: 50% 0 0 50%;
+}
+.lds-heart div:after {
+  top: -24px;
+  border-radius: 50% 50% 0 0;
+}
+@keyframes lds-heart {
+  0% {
+    transform: scale(0.95);
+  }
+  5% {
+    transform: scale(1.1);
+  }
+  39% {
+    transform: scale(0.85);
+  }
+  45% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(0.9);
+  }
+}
+
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100vw; /* Full width */
+  height: 100vh; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 601px) {
+  .bottom-tab {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .bottom-tab {
+    display: block;
+  }
+    
+  .bottom-tab-main {
+    position: fixed;
+    height: 70px;
+    bottom: 0px;
+    background-color:white;
+    left: 0px;
+    right: 0px;
+    margin-bottom: 0px;
+    z-index: 100;
+  }
+
+  .tab-menu {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid grey;
+    
+  } 
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding-top: 5px;
+  }
+}
