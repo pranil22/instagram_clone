@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import getMyPosts from '../../actionCreators/getMyPosts';
 import { FETCH_MY_POST_FAILED, FETCH_MY_POST_LOADING, FETCH_MY_POST_SUCCESS } from '../../actionTypes/postTypes';
 import Loading from '../Loading';
 import Modal from './Modal';
@@ -78,7 +77,11 @@ function Profile() {
                 borderBottom: "1px solid grey"
             }}>
                 <div style={{ padding: "5px" }}>
-                    <img style={{ width: '140px', height: '140px', borderRadius: '70px' }} 
+                    <img style={{ 
+                            width: '140px', 
+                            height: '140px', 
+                            borderRadius: '70px' 
+                        }} 
                         src={user?user.profilePic:"no"}
                         alt="profile_pic"
                     />
@@ -89,18 +92,30 @@ function Profile() {
                             padding: "7px", 
                             borderRadius: "4px"
                         }}
-                        onClick = { () => { dispatch({type:"SET", payload: true}) }}
+                        onClick = { 
+                            () => { dispatch({type:"SET", payload: true}) }
+                        }
                     >
                         Change Profile Picture
                         
                     </button>
                     
                 </div>
-                <div style= {{ width: "100%" }}>
-                    <h5 style={{ marginLeft: "20px"}}>{ user?user.name:'Loading'}</h5>
-                    <h6 style={{ marginLeft: "20px"}}>{ user?user.email:'Loading' }</h6>
+                <div style= {{ width: "100%", overflow: 'hidden' }}>
+                    <h5 style={{ marginLeft: "5px"}}>
+                        { user?user.name:'Loading'}
+                    </h5>
+                    <h6 style={{ marginLeft: "5px", fontSize: "15px"}}>
+                        { user?user.email:'Loading' }
+                    </h6>
                     <div
-                        style={{ maxWidth: "100%", marginLeft: "20px", display: "flex",justifyContent:"space-between",flexWrap: "wrap"  , width: "100%" }}
+                        style={{ 
+                            marginLeft: "5px", 
+                            display: "flex",
+                            justifyContent:"space-between",
+                            flexWrap: "wrap", 
+                            maxWidth: "70%" 
+                        }}
                     >
                         <h6>{ posts[0]?posts.length:"0" } post</h6>
                         <h6>

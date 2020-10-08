@@ -18,6 +18,8 @@ function UserFollowers() {
 
         dispatch({type: "FETCH_USERS_LOADING"});
 
+        
+
         fetch(`/followers/${userId}`, {
             method: "GET",
             headers: {

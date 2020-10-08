@@ -1,16 +1,56 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom'
 import { USER_LOGOUT } from '../actionTypes/userTypes';
+import M from 'materialize-css';
 
 function BottomTab() {
 
     const userState = useSelector(state => state.user)
     let { user } = userState;
 
+    const [users, setUsers] = useState([]);
+    const [search, setSearch] = useState("");
+    const searchRef = useRef(null);
     const dispatch = useDispatch();
     const history = useHistory();
     
+
+    const searchUsers = (user) => {
+        setSearch(user);
+
+        if(user.trim() === "") {
+            console.log("Empty");
+            setUsers([]);
+            return;
+        }
+
+        fetch(`/search/${user}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "bearer " + JSON.parse(localStorage.getItem("token"))
+            }
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+            setUsers(data);
+            data.map((user) => {
+                console.log(user.name);
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }
+
+
+    useEffect(() => {
+        console.log(history);
+        M.Modal.init(searchRef.current)
+    }, [])
+
     const logout = () => {
         localStorage.clear();
         dispatch({type: USER_LOGOUT});
@@ -18,6 +58,54 @@ function BottomTab() {
     }
 
     return (
+        <>
+            <div id="modal1" className="modal" 
+                style={{ color: "black" }} 
+                ref={searchRef}>
+                <div className="modal-content">
+                    <input 
+                         type="text" 
+                        placeholder="Search Users"
+                        value={ search }
+                        onChange={ (e) => { searchUsers(e.target.value)} }
+                    />
+
+                    {
+                        users[0]?<div>
+                            {
+                                users.map((user1) => {
+                                    return <div 
+                                        style={{  
+                                            margin: "3px", 
+                                            padding: "0px", 
+                                            paddingLeft: "5px",
+                                            borderBottom: "1px solid black",
+                                            cursor: "pointer"
+                                        }}
+                                        key={ user1._id } 
+                                        onClick={ () =>{ 
+                                            M.Modal.getInstance(searchRef.current).close() 
+                                            setSearch("");
+                                            setUsers([]);
+                                        } }
+                                        >
+                                            <Link to={ user._id === user1._id?'/profile':`/profile/${user1._id}`}>
+                                                <img src={ user1.profilePic } className="avatar2"/>
+                                                { user1.name }
+                                            </Link>
+                                            
+                                    </div>
+                                })
+                            }
+                        </div>: 
+                        null
+                    }
+                  <button className="modal-close waves-effect waves-green btn-flat">
+                      Close
+                    </button>
+
+                </div>
+            </div>
         <div className="bottom-tab">
             <div className="bottom-tab-main">
                 <div className="tab-menu">
@@ -34,6 +122,19 @@ function BottomTab() {
                             </div>
                             <div>
                                 <div className="item">
+                                    <div
+                                        data-target="modal1"
+                                        className="modal-trigger"
+                                    >
+                                        <i 
+                                            className="material-icons"
+                                        >search</i>
+                                        <div>Search</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div className="item">
                                     <Link to="/myfollowingposts">
                                         <i className="material-icons">explore</i>
                                         <div>My Following</div>
@@ -43,7 +144,10 @@ function BottomTab() {
                             <div>
                                 <div className="item">
                                     <Link to="/profile">
-                                        <i className="material-icons">account_circle</i>
+                                        {
+                                            user?<img src={ user.profilePic } className="avatar2"></img>:
+                                            <i className="material-icons">account_circle</i>
+                                        }
                                         <div>Profile</div>
                                     </Link>
                                 </div>
@@ -58,7 +162,9 @@ function BottomTab() {
                             </div>
                             <div>
                                 <div className="item">
-                                    <i className="material-icons">exit_to_app</i>
+                                    <div>
+                                        <i className="material-icons">exit_to_app</i>
+                                    </div>
                                     <div>
                                         <button 
                                             style={{
@@ -103,6 +209,7 @@ function BottomTab() {
                 
             </div>
         </div>
+    </>
     )
 }
 

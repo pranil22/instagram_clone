@@ -18,6 +18,8 @@ import Followers from './components/screens/Followers';
 import Followings from './components/screens/Followings';
 import UserFollowers from './components/screens/UserFollowers';
 import UserFollowings from './components/screens/UserFollowings';
+import Reset from './components/screens/Reset';
+import NewPassword from './components/screens/Newpassword';
 
 
 function Routing() {
@@ -37,7 +39,9 @@ function Routing() {
       })
     }
     else {
-      history.push("/login");
+      if(!history.location.pathname.startsWith('/reset')) {
+        history.push("/login");
+      }
     }
   }, [])
 
@@ -54,6 +58,8 @@ function Routing() {
         <Route exact path="/followings" component = { Followings }/>
         <Route path="/followers/:userId" component = { UserFollowers }/>
         <Route path="/followings/:userId" component = { UserFollowings }/>
+        <Route exact path="/reset" component = { Reset }/>
+        <Route exact path="/reset/:token" component = { NewPassword }/>
     </Switch>
   )
 

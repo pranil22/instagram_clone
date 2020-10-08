@@ -1,11 +1,28 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const crypto = require('crypto');
+
 const User = mongoose.model('User');
 const bcrypt = require('bcrypt');
-const { JWT_SECRET } = require('../config/keys');
+const { JWT_SECRET, SEND_GRID_API_KEY } = require('../config/keys');
 const jwt = require('jsonwebtoken');
 const loginMiddlewre = require('../middleware/requiredLogin');
+
+
+const nodemailer = require('nodemailer');
+const sentGridTransport = require('nodemailer-sendgrid-transport');
+const { EMAIL_URL } = require('../config/keys');
+
+const options = {
+    auth: {
+        api_key: SEND_GRID_API_KEY
+    }
+}
+
+const mailer = nodemailer.createTransport(sentGridTransport(options));
+
+//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
 
 router.post('/signup', (req, res, next) => {
     const { name,email, password, profilePic} = req.body;
@@ -55,6 +72,20 @@ router.post('/signup', (req, res, next) => {
                         .save()
                         .then((user) => {
                             console.log(user);
+
+                            const email1 = {
+                                to: user.email,
+                                from: "instagram.12.official@gmail.com",
+                                subject: "Welcome to Instagram",
+                                html:`<h3>Welcome to Instagram</h3>
+                                    <p>Glad to see you</p>`
+                            }
+
+                            mailer.sendMail(email1, (err, res) => {
+                                console.log(err);
+                                console.log(res);
+                                console.log(email1.to);
+                            });
                             res.status(201).json({
                                 message: 'Successfully registered user'
                             })
@@ -139,5 +170,71 @@ router.post('/signin', (req, res, next) => {
             });
         })
 })
+
+router.post("/reset-password", (req, res) => {
+    
+    if(!req.body.email) {
+        return res.status(422).json({error: "Enter email address"});
+    }
+
+    crypto.randomBytes(32, (err, buffer) => {
+        const token = buffer.toString("hex");
+        User.findOne({email: req.body.email})
+            .then((user) => {
+                if(user === null) {
+                    return res.status(404).json({error: "User not found with given email"});
+                }
+
+                if(user) {
+                    user.resetToken = token;
+                    user.expireToken = Date.now() + 3600000;
+
+                    user.save()
+                        .then((result) => {
+                            mailer.sendMail({
+                                to: user.email,
+                                from: "instagram.12.official@gmail.com",
+                                subject: "Reset password",
+                                html : `<p>You requested for password change<?p>
+                                    <h5>Click this <a href="${EMAIL_URL}/${token}">Link</a> to reset password</h5>
+                                `
+                            })
+
+                            res.status(200).json({message: "Check your mail"});
+                        })
+                }
+                else {
+                    res.status(404).json({error: "User not found"});
+                }
+            })
+    })
+});
+
+router.post("/new-password", (req, res) => {
+    const { token, password } = req.body;
+
+    User.findOne({resetToken: token, expireToken: { $gt: Date.now()}})
+        .then((user) => {
+            if(user) {
+                bcrypt.hash(password, 12)
+                    .then((hashedPassword) => {
+                        user.password = hashedPassword;
+                        user.resetToken = undefined;
+                        user.expireToken = undefined;
+
+                        user.save()
+                            .then((result) => {
+                                return res.status(200).json({message: "Password updated"})
+                            })
+                            .catch((err) => {
+                                return res.status(500).json({error: "Server Error"})
+                            })
+                    })
+            } else {
+                return res.status(404).json({error: "Session expired try again"});
+            } 
+        })
+})
+
 
 module.exports = router;

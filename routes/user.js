@@ -164,6 +164,18 @@ router.put("/updateProfile/:userId", (req, res) => {
     })
 });
 
+router.get("/search/:query", (req, res) => {
+    let query = req.params.query;
+    let userPatten = new RegExp(query, "i");
+    User.find({ name: { $regex: userPatten} })
+        .then((users) => {
+            return res.status(200).json(users);
+        })
+        .catch((err) => {
+            return res.status(500).json({error: "Server error"});
+        })
+})
+
 module.exports = router;
 
 

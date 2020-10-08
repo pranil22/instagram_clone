@@ -5,10 +5,9 @@ import { USER_LOGIN_SUCCESS } from '../../actionTypes/userTypes';
 import { useDispatch } from 'react-redux';
 import Loading from '../Loading';
 
-function Login() {
+function Reset() {
     const history = useHistory();
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const dispatch = useDispatch();
 
     const [process, setProcess] = useState(false);
@@ -18,21 +17,19 @@ function Login() {
 
         setProcess(true);
         setEmail("");
-        setPassword("");
 
         const regExpEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if(!regExpEmail.test(email)) {
             M.toast({html: "Invalid Email", classes: "#e53935 red darken-1"})
         }
         else {
-            fetch("/signin", {
+            fetch("/reset-password", {
                 method: "POST",
                 headers:{
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    email,
-                    password
+                    email
                 })
             })
             .then(res => {
@@ -43,19 +40,9 @@ function Login() {
                 if(data.error) {
                     M.toast({html: data.error, classes: "#e53935 red darken-1"})
                 }
-                else if(!data.token){
-                    M.toast({html: "Something went wrong", classes: "#e53935 red darken-1"})
-                }
                 else {
-                    dispatch({
-                        type: USER_LOGIN_SUCCESS,
-                        payload: data.user
-                    });
                     console.log(data)
-                    localStorage.setItem("token", JSON.stringify(data.token));
-                    localStorage.setItem("user", JSON.stringify(data.user));
-                    M.toast({ html:"Logged In Successfully", classes: "#66bb6a green lighten-1"});
-                    history.push("/");
+                    M.toast({ html: data.message, classes: "#66bb6a green lighten-1"});
                 }
             })
         }
@@ -73,26 +60,17 @@ function Login() {
                                 <h1 className="instagram">Instagram</h1> 
                                 <input 
                                     type="text" 
-                                    placeholder="email"
+                                    placeholder="Email"
                                     value={ email }
                                     onChange={ (e) => { setEmail(e.target.value)} }
-                                />
-                                <input
-                                    type="password" 
-                                    placeholder="password"
-                                    value= { password } 
-                                    onChange={ (e) => { setPassword(e.target.value)} }
                                 />
                                 <button 
                                     className="btn waves-effect waves-light #64b5f6 blue darken-1"
                                     type="submit"
                                     onClick= { logIn }    
                                 >
-                                    Login
+                                    Reset password
                                 </button>
-                                <Link to="/reset">
-                                    <div className="links">Forgot Password?</div> 
-                                </Link>
                                 <Link to="/signup">
                                     <div className="links">Don't have account? Create account</div> 
                                 </Link>
@@ -108,4 +86,4 @@ function Login() {
     )
 }
 
-export default Login
+export default Reset

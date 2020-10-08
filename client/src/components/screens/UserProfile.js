@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { USER_PROFILE_FAILED, USER_PROFILE_FOLLOWING, USER_PROFILE_LOADING, USER_PROFILE_SUCCESS, USER_PROFILE_UNFOLLOWING } from '../../actionTypes/userProfileTypes';
 import { USER_FOLLOW, USER_UNFOLLOW } from '../../actionTypes/userTypes';
 import Loading from '../Loading';
@@ -12,9 +12,13 @@ function UserProfile() {
     const userProfile = useSelector(state => state.userProfile);
     const { userId } = useParams();
     const [isProcessing, setIsProcessing] = useState(false);
-
     const [loading, setLoading] = useState(false);
+    const location = useLocation();
 
+    console.log(location.pathname);
+
+
+    
     useEffect(() => {
 
         setLoading(true);
@@ -46,7 +50,7 @@ function UserProfile() {
             setLoading(false);
             
         })
-    }, [])
+    }, [location.pathname])
 
     const renderFollowOrUnfollow = () => {
         if(userProfile.user) {
@@ -153,23 +157,29 @@ function UserProfile() {
                     margin: "10px 0px",
                     borderBottom: "1px solid grey"
                 }}>
-                    <div>
-                        <img style={{ width: '160px', height: '160px', borderRadius: '80px' }} 
+                    <div style={{ padding: '5px' }}>
+                        <img style={{ width: '140px', 
+                            height: '140px', 
+                            borderRadius: '70px' 
+                        }} 
                             src = { userProfile.user?userProfile.user.profilePic: 'no'}
                             alt = "profile_pic"
                         />
                     </div>
-                    <div style= {{ width: "100%" }}>
-                        <h5 style={{ marginLeft: "20px"}}>
+                    <div style= {{ width: "100%", overflow: 'hidden' }}>
+                        <h5 style={{ marginLeft: "5px"}}>
                             { userProfile.user?userProfile.user.name:'Loading...'}
                         </h5>
+                        <h6 style={{ marginLeft: "5px", fontSize: "15px"}}>
+                            { userProfile.user?userProfile.user.email:'Loading...'}
+                        </h6>
                         <div
                             style={{ 
-                                maxWidth: "100%", 
-                                marginLeft: "20px", 
+                                maxWidth: "70%", 
+                                marginLeft: "5px", 
                                 display: "flex",
                                 justifyContent:"space-between",
-                                width: "100%"
+                                flexWrap: 'wrap'
                             }}
                         >
                             <h6>{ 

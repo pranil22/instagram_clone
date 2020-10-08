@@ -24,6 +24,21 @@ a {
   border-radius: 50%;
 }
 
+.avatar2 {
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+
+.avatar_3 {
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
 
 .instagram {
   font-family: 'Grand Hotel', cursive;
@@ -179,7 +194,7 @@ a {
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 900px) {
   .bottom-tab {
     display: block;
   }
