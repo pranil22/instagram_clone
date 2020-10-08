@@ -7,7 +7,6 @@ const User = mongoose.model('User');
 const bcrypt = require('bcrypt');
 const { JWT_SECRET, SEND_GRID_API_KEY } = require('../config/keys');
 const jwt = require('jsonwebtoken');
-const loginMiddlewre = require('../middleware/requiredLogin');
 
 
 const nodemailer = require('nodemailer');
@@ -196,7 +195,7 @@ router.post("/reset-password", (req, res) => {
                                 from: "instagram.12.official@gmail.com",
                                 subject: "Reset password",
                                 html : `<p>You requested for password change<?p>
-                                    <h5>Click this <a href="${EMAIL_URL}/${token}">Link</a> to reset password</h5>
+                                    <h5>Click this <a href="${EMAIL_URL}/reset/${token}">Link</a> to reset password</h5>
                                 `
                             })
 
